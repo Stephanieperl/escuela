@@ -1,26 +1,35 @@
 <?php namespace App\Controllers\API;
 
 use App\Models\EstudianteModel;
+use App\Models\GradoModel;
+use App\Models\ProfesorModel;
 use CodeIgniter\RESTful\ResourceController;
 
-class Estudiantes extends ResourceController
+class Grados extends ResourceController
 {
     public function __construct()
     {
-        $this->model = $this->setModel(new EstudianteModel());
-    }
+        $this->model = $this->setModel(new GradoModel());
+    } 
 	public function index()
-	{
-        $estudiantes = $this->model->findAll();
-		return $this->respond($estudiantes);
+	{   
+        $ProfesorModel = new ProfesorModel();
+
+        $getGrados = $this->model->findAll();
+        foreach ($getGrados as $value) {
+            $value["profesor"] = $ProfesorModel->find($value["profesor_id"]);
+            $grados[] = $value;
+        }
+
+        return $this->respond($grados);
     }
     public function create()
     {
         try {
-            $estudiante = $this->request->getJSON();
-            if($this->model->insert($estudiante)) {
-                $estudiante->id = $this->model->insertID();
-               return $this->respondCreated($estudiante);
+            $grado = $this->request->getJSON();
+            if($this->model->insert($grado)) {
+                $grado->id = $this->model->insertID();
+               return $this->respondCreated($grado);
             }else{
                 return $this->failValidationError($this->model->validation->listErrors());
             }
@@ -32,33 +41,30 @@ class Estudiantes extends ResourceController
 	{
         try {
             if ($id == null)
-                return $this->failValidationError('ID Invalido');
+                return $this->failValidationError('ID invalido');
             
-            $estudiante = $this->model->find($id);
-            if ($estudiante == null)
-                return $this->failValidationError('Cliente no encontrado '.$id);
-
-            return $this->respond($estudiante);
+            $grado = $this->model->find($id);
+            if ($grado == null)
+                return $this->failValidationError('Cliente no encontrado'.$id);
+            return $this->respond($grado);
 
         } catch (\Exception $e) {
             return $this->failServerError('Error en el server');
         }
-    }  
+    }
     public function update($id = null)
 	{
         try {
             if ($id == null)
                 return $this->failValidationError('ID invalido');
             
-            $estudianteVerificado = $this->model->find($id);
-            if ($estudianteVerificado == null)
+            $gradoVerificado = $this->model->find($id);
+            if ($gradoVerificado == null)
                 return $this->failValidationError('Cliente no encontrado'.$id);
-
-
-            $estudiante = $this->request->getJSON();
-            if($this->model->update($id, $estudiante)) {
-                $estudiante->id = $id;
-                return $this->respondUpdated($estudiante);
+            $grado = $this->request->getJSON();
+            if($this->model->update($id, $grado)) {
+                $grado->id = $id;
+                return $this->respondUpdated($grado);
             }else{
                 return $this->failValidationError($this->model->validation->listErrors());
             }
@@ -72,18 +78,18 @@ class Estudiantes extends ResourceController
             if ($id == null)
                 return $this->failValidationError('ID invalido');
             
-            $estudianteVerificado = $this->model->find($id);
-            if ($estudianteVerificado == null)
+            $gradoVerificado = $this->model->find($id);
+            if ($gradoVerificado == null)
                 return $this->failValidationError('Cliente no encontrado'.$id);
 
             if($this->model->delete($id)) {
-                return $this->respondDeleted($estudianteVerificado);
+                return $this->respondDeleted($gradoVerificado);
             }else{
-                return $this->failServerError('No se pudo eliminar el registro');
+                return $this->failServerError('No se ha podido eliminar el registro');
             }
         } catch (\Exception $e) {
             return $this->failServerError('Error en el server');
         }
-	}
-
+    }
+    
 }

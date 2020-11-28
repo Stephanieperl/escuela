@@ -15,7 +15,7 @@ if (file_exists(SYSTEMPATH . 'Config/Routes.php'))
  * Router Setup
  * --------------------------------------------------------------------
  */
-$routes->setDefaultNamespace('App\Controllers');
+$routes->setDefaultNamespace('App\Controllers\API');
 $routes->setDefaultController('Home');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
@@ -31,6 +31,26 @@ $routes->setAutoRoute(true);
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
+$routes->group('api', ['namespace' => 'App\Controllers\API'], function($routes){
+	$routes->get('profesores', 'Profesores::index');
+	$routes->post('profesores/create', 'Profesores::create');
+	$routes->get('profesores/edit/(:num)', 'Profesores::edit/$1');
+	$routes->put('profesores/update/(:num)', 'Profesores::update/$1');
+	$routes->delete('profesores/delete/(:num)', 'Profesores::delete/$1');
+	$routes->get('grados', 'Grados::index');
+	$routes->post('grados/create', 'Grados::create');
+	$routes->get('grados/edit/(:num)', 'Grados::edit/$1');
+	$routes->put('grados/update/(:num)', 'Grados::update/$1');
+	$routes->delete('grados/delete/(:num)', 'Grados::delete/$1');
+	$routes->get('estudiantes', 'Estudiantes::index');
+	$routes->post('estudiantes/create', 'Estudiantes::create');
+	$routes->get('estudiantes/edit/(:num)', 'Estudiantes::edit/$1');
+	$routes->put('estudiantes/update/(:num)', 'Estudiantes::update/$1');
+	$routes->delete('estudiantes/delete/(:num)', 'Estudiantes::delete/$1');
+
+	
+
+});
 
 /**
  * --------------------------------------------------------------------

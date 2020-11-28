@@ -1,26 +1,26 @@
 <?php namespace App\Controllers\API;
 
-use App\Models\EstudianteModel;
+use App\Models\ProfesorModel;
 use CodeIgniter\RESTful\ResourceController;
 
-class Estudiantes extends ResourceController
+class Profesores extends ResourceController
 {
     public function __construct()
     {
-        $this->model = $this->setModel(new EstudianteModel());
+        $this->model = $this->setModel(new ProfesorModel());
     }
 	public function index()
 	{
-        $estudiantes = $this->model->findAll();
-		return $this->respond($estudiantes);
+        $profesores = $this->model->findAll();
+		return $this->respond($profesores);
     }
     public function create()
     {
         try {
-            $estudiante = $this->request->getJSON();
-            if($this->model->insert($estudiante)) {
-                $estudiante->id = $this->model->insertID();
-               return $this->respondCreated($estudiante);
+            $profesor = $this->request->getJSON();
+            if($this->model->insert($profesor)) {
+                $profesor->id = $this->model->insertID();
+               return $this->respondCreated($profesor);
             }else{
                 return $this->failValidationError($this->model->validation->listErrors());
             }
@@ -32,55 +32,62 @@ class Estudiantes extends ResourceController
 	{
         try {
             if ($id == null)
-                return $this->failValidationError('ID Invalido');
+                return $this->failValidationError('ID invalido');
             
-            $estudiante = $this->model->find($id);
-            if ($estudiante == null)
-                return $this->failValidationError('Cliente no encontrado '.$id);
+            $profesor = $this->model->find($id);
+            if ($profesor == null)
+                return $this->failValidationError('No se ha encontrado un cliente con el '.$id);
 
-            return $this->respond($estudiante);
+            return $this->respond($profesor);
 
         } catch (\Exception $e) {
             return $this->failServerError('Error en el server');
         }
-    }  
+    }
     public function update($id = null)
 	{
         try {
             if ($id == null)
                 return $this->failValidationError('ID invalido');
             
-            $estudianteVerificado = $this->model->find($id);
-            if ($estudianteVerificado == null)
-                return $this->failValidationError('Cliente no encontrado'.$id);
+            $profesorVerificado = $this->model->find($id);
+            if ($profesorVerificado == null)
+                return $this->failValidationError('No se ha encontrado un cliente con el '.$id);
 
 
-            $estudiante = $this->request->getJSON();
-            if($this->model->update($id, $estudiante)) {
-                $estudiante->id = $id;
-                return $this->respondUpdated($estudiante);
+            $profesor = $this->request->getJSON();
+            if($this->model->update($id, $profesor)) {
+                $profesor->id = $id;
+                return $this->respondUpdated($profesor);
             }else{
                 return $this->failValidationError($this->model->validation->listErrors());
             }
+
+            
+
         } catch (\Exception $e) {
             return $this->failServerError('Error en el server');
         }
     }
+
     public function delete($id = null)
 	{
 		try {
             if ($id == null)
                 return $this->failValidationError('ID invalido');
             
-            $estudianteVerificado = $this->model->find($id);
-            if ($estudianteVerificado == null)
-                return $this->failValidationError('Cliente no encontrado'.$id);
+            $profesorVerificado = $this->model->find($id);
+            if ($profesorVerificado == null)
+                return $this->failValidationError('No se ha encontrado un cliente con el '.$id);
 
             if($this->model->delete($id)) {
-                return $this->respondDeleted($estudianteVerificado);
+                return $this->respondDeleted($profesorVerificado);
             }else{
                 return $this->failServerError('No se pudo eliminar el registro');
             }
+
+            
+
         } catch (\Exception $e) {
             return $this->failServerError('Error en el server');
         }

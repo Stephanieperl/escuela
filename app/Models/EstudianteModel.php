@@ -11,14 +11,7 @@ class EstudianteModel extends Model{
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
-    protected $validationRules  = [
-        'nombre'        => 'required|alpha_space|min_length[2]|max_length[75]',
-        'apellido'      => 'required|alpha_space|min_length[2]|max_length[75]',
-        'dui'           => 'required|min_length[9]|max_length[10]',
-        'genero'        => 'required|alpha_space|min_length[1]|max_length[1]',
-        'carnet'        => 'required|min_length[8]|max_length[9]',
-        'grado_id'      => 'required|max_length[1]'
-    ];
+    protected $hidden = ['dui', 'apellido', 'dui', 'grado_id'];
 
     protected $skipValidation   = false; 
 }

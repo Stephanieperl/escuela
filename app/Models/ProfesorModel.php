@@ -11,12 +11,6 @@ class ProfesorModel extends Model
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
     protected $updatedField = 'updated_at';
-    protected $validationRules  = [
-        'nombre'    => 'required|alpha_space|min_length[3]|max_length[75]',
-        'apellido'  => 'required|alpha_space|min_length[3]|max_length[75]',
-        'profesion' => 'required|alpha_space|min_length[1]|max_length[3]',
-        'telefono'  => 'required|min_length[8]|max_length[9]',
-        'dui'       => 'required|min_length[9]|max_length[10]',
-    ];
+    protected $hidden = ['apellido', 'dui'];
     protected $skipValidation   = false;
 }
